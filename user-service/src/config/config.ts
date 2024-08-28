@@ -7,7 +7,7 @@ class Config{
 	private static instance: Config;
 
 	private readonly _dbConnectionString: string;
-	private readonly _apiKey: string;
+	private readonly _stripeApiKey: string;
 	private readonly _port: number;
     private readonly _jwtSecret: string;
 
@@ -15,7 +15,7 @@ class Config{
         // Initialize configuration properties
         this._port = Number(process.env.PORT);
         this._dbConnectionString = process.env.MONGO_URI as string;
-        this._apiKey = process.env.STRIPE_API_KEY as string;
+        this._stripeApiKey = process.env.STRIPE_SECRET_KEY as string;
         this._jwtSecret = process.env.JWT_SECRET as string;
     }
 
@@ -36,8 +36,8 @@ class Config{
         return this._dbConnectionString;
     }
 
-    public get apiKey(): string {
-        return this._apiKey;
+    public get stripeApiKey(): string {
+        return this._stripeApiKey;
     }
 
     public get jwtKey(): string{

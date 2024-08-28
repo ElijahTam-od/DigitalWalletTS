@@ -1,18 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import z from 'zod';
-import schemas from '../utils/validator'; // Adjust the path as needed
+import { ZodSchema, ZodError } from 'zod';
 
-// Middleware function to validate request body
-export const validateRequest = (schema: z.ZodType<any, any, any>) => {
+export const createValidationMiddleware = (validationFunction: (data: any) => { error?: ZodError }) => {
 	return (req: Request, res: Response, next: NextFunction) => {
-		try {
-			schema.parse(req.body);
-			next();
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				return res.status(400).json({ error: error.errors });
-			}
-			next(error); // Passes other types of errors to the next error handler
+		const { error } = validationFunction(req.body);
+		if (error) {
+			return res.status(400).json({ error: error.errors[0].message });
 		}
+		next();
 	};
 };
+
+export default createValidationMiddleware;

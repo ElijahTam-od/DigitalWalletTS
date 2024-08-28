@@ -1,25 +1,21 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
+import {IWallet} from "../model/user.model";
 
+// Define the User interface
 export interface IUser extends Document {
-	_id: string;
 	email: string;
 	password: string;
 	firstName: string;
 	lastName: string;
-	//wallet: IWallet;
+	role: 'user' | 'admin';
+	stripeCustomerId?: string;
+	wallet?: IWallet;
+	isEmailVerified: boolean;
+	emailVerificationToken?: string;
+	emailVerificationExpires?: Date;
 	createdAt: Date;
-	checkPassword(candidatePassword:string): Promise<boolean>;
+	checkPassword(candidatePassword: string): Promise<boolean>;
 }
 
-export interface RegisterRequestBody {
-	email: string;
-	password: string;
-	firstName: string;
-	lastName: string;
-}
-
-export interface LoginRequestBody {
-	email: string;
-	password: string;
-}
+export type KYCStatus = "approved" | "pending" | "rejected";
   
